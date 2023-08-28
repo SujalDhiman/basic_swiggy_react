@@ -1,0 +1,31 @@
+.container
+{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap:10px;
+}
+
+.search
+{
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    left:0px;
+}
+#text1
+{
+    width: 250px;
+    padding: 10px 5px;
+    border-radius: 5px;
+}
+.search-btn
+{
+    width: 100px;
+    padding: 5px 5px;
+    border-radius: 5px;
+    margin-left: 5px;
+}
