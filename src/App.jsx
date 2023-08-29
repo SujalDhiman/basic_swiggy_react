@@ -1,7 +1,8 @@
 import Header from "./components/header/header";
 import Body from "./components/body/body";
-import Restaurant from "./components/Restaurant/restaurant";
 import { createBrowserRouter,Outlet } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import Shimmer from "./components/shimmer/shimmer";
 function App(){
     return (
         <>
@@ -10,7 +11,8 @@ function App(){
         </>
     )
 }
-
+//performing lazy loading
+const Restaurant=lazy(()=>import("../src/components/Restaurant/restaurant.jsx"))
 const createRoutes=createBrowserRouter([
     {
         path:"/",
@@ -22,7 +24,10 @@ const createRoutes=createBrowserRouter([
             },
             {
                 path:"dish/:id",
-                element:<Restaurant />
+                element:
+                <Suspense fallback={<Shimmer />}>
+                    <Restaurant />
+                </Suspense>
             }
         ]
     }

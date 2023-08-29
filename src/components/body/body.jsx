@@ -3,7 +3,8 @@ import Shimmer from "../shimmer/shimmer";
 import Card from "../card/card";
 import "./body.css"
 import { Link } from "react-router-dom";
-
+import { filter } from "../../../utils/filter";
+import { useOnline } from "../../../utils/useOnline";
 function Body(){
     let retain=[];
     const[restaurant,setRestaurant]=useState([])
@@ -25,34 +26,22 @@ function Body(){
         setfilterRestaurant(data?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
         setIsLoading(false)
     }
-
-    function filter(chkText){
-        if(chkText === "")
-            setfilterRestaurant(restaurant)
-        else
-        {
-            let regex=new RegExp(chkText,"gi")
-            let filteredResult=restaurant.filter((ele)=>regex.test(ele.info.name))
-            if(filteredResult.length === 0)
-                setfilterRestaurant(restaurant)
-            else
-                setfilterRestaurant(restaurant.filter((ele)=>regex.test(ele.info.name)))
-        }
-    }
-
-
+    let chkOnline=useOnline()
+    if(!chkOnline) return <h2>You are Offline please check your internet 👀</h2>
+    else
+    {
     return (
         <>
         <div className="search">
-            <input type="text" name="text1" id="text1" placeholder="Search Restaurant Name" value={text} onChange={(e)=>{
-                    setText(e.target.value)}}/>
-            <button className="search-btn" onClick={()=>filter(text)}>Search</button>
+            <input type="text" name="text1" id="text1" placeholder="Search Restaurant Name" value={text} onChange={(e)=>{setText(e.target.value)}}/>
+            <button className="search-btn" onClick={()=>setfilterRestaurant(filter(text,restaurant))}>Search</button>
         </div>
         {isLoading === false && restaurant?.length !== 0 ? <div className="container">
             {filterRestaurant.map((ele)=><Link to={`/dish/${ele.info.id}`}><Card key={ele.info.id} imageUrl={ele.info.cloudinaryImageId} rName={ele.info.name} aName={ele.info.areaName} cuisines={ele.info.cuisines} aRating={ele.info.avgRating}></Card></Link>)}</div>: <div className="container"> <Shimmer/> </div> 
         }
         </>
     )
+    }
 }
 
 export default Body;
